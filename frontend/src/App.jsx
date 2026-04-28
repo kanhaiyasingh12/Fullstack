@@ -7,7 +7,10 @@ import Profile from './components/Profile' // Import your Profile component
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(() => {
+    const savedCount = localStorage.getItem('count')
+    return savedCount ? Number(savedCount) : 0
+  })
   const [connectionStatus, setConnectionStatus] = useState("Checking Connection...")
 
   // Backend Connection Check
@@ -16,6 +19,10 @@ function App() {
       .then(() => setConnectionStatus("✅ Backend Connected"))
       .catch(() => setConnectionStatus("❌ Backend Offline"));
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('count', String(count))
+  }, [count])
 
   return (
     <>
