@@ -33,9 +33,7 @@ jobs:
         run: |
           set -e
           BACKEND_IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/fullstack-backend:${{ github.sha }}"
-          mkdir -p deploy/backend
-          cp backend/docker-compose.yaml deploy/backend/docker-compose.yaml
-          sed -i "s|image: .*|image: ${BACKEND_IMAGE}|g" deploy/backend/docker-compose.yaml
+          sed -i "s|image: .*|image: ${BACKEND_IMAGE}|g" backend/docker-compose.yaml
 
       - name: Copy backend files to server
         uses: appleboy/scp-action@v0.1.7
@@ -44,8 +42,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          source: deploy
-          target: ${{ secrets.SSH_DEPLOY_PATH }}
+          source: backend/docker-compose.yaml
+          target: /home/ubuntu/website/backend
 
       - name: Deploy backend on Docker Swarm
         uses: appleboy/ssh-action@v1.2.0
@@ -56,5 +54,5 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             set -e
-            cd "${{ secrets.SSH_DEPLOY_PATH }}/deploy"
+            cd /home/ubuntu/website/backend
             docker stack deploy -c backend/docker-compose.yaml backend

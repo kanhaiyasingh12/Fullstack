@@ -33,9 +33,7 @@ jobs:
         run: |
           set -e
           FRONTEND_IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/fullstack-frontend:${{ github.sha }}"
-          mkdir -p deploy/frontend
-          cp frontend/docker-compose.yaml deploy/frontend/docker-compose.yaml
-          sed -i "s|image: .*|image: ${FRONTEND_IMAGE}|g" deploy/frontend/docker-compose.yaml
+          sed -i "s|image: .*|image: ${FRONTEND_IMAGE}|g" frontend/docker-compose.yaml
 
       - name: Copy frontend files to server
         uses: appleboy/scp-action@v0.1.7
@@ -44,7 +42,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          source: deploy
+          source: frontend/docker-compose.yaml
           target: /home/ubuntu/website/frontend
 
       - name: Deploy frontend on Docker Swarm
@@ -57,4 +55,4 @@ jobs:
           script: |
             set -e
             cd /home/ubuntu/website/frontend
-            docker compose up -d
+            docker stack deploy -c frontend/docker-compose.yaml frontend

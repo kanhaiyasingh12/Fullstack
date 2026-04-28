@@ -33,9 +33,7 @@ jobs:
         run: |
           set -e
           DB_IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/fullstack-db:${{ github.sha }}"
-          mkdir -p deploy/db-init
-          cp db-init/docker-compose.yaml deploy/db-init/docker-compose.yaml
-          sed -i "s|image: .*|image: ${DB_IMAGE}|g" deploy/db-init/docker-compose.yaml
+          sed -i "s|image: .*|image: ${DB_IMAGE}|g" db-init/docker-compose.yaml
 
       - name: Copy db files to server
         uses: appleboy/scp-action@v0.1.7
@@ -44,8 +42,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          source: deploy
-          target: ${{ secrets.SSH_DEPLOY_PATH }}
+          source: db-init/docker-compose.yaml
+          target: /home/ubuntu/website/db-init
 
       - name: Deploy db on Docker Swarm
         uses: appleboy/ssh-action@v1.2.0
@@ -56,5 +54,5 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             set -e
-            cd "${{ secrets.SSH_DEPLOY_PATH }}/deploy"
+            cd /home/ubuntu/website/db-init
             docker stack deploy -c db-init/docker-compose.yaml db
