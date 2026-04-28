@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "username": "kanhaiya",
+    "email": "kanhaiya@example.com",
+    "bio": "Fullstack developer profile (stored fallback data)."
+  },
+  {
+    "id": 2,
+    "username": "alex",
+    "email": "alex@example.com",
+    "bio": "Frontend focused profile (stored fallback data)."
+  },
+  {
+    "id": 3,
+    "username": "sam",
+    "email": "sam@example.com",
+    "bio": "Backend focused profile (stored fallback data)."
+  }
+]

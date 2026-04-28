@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  frontend:
+    image: frontend:latest
+    container_name: frontend_web
+    restart: always
+    ports:
+      - "5137:5137"
