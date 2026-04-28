@@ -11,6 +11,6 @@ RUN npm run build
 
 # Production stage
 
-EXPOSE 5137
+EXPOSE 5173
 
 CMD ["npm", "run", "dev"]
