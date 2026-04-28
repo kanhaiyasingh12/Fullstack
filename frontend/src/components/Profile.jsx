@@ -12,7 +12,12 @@ const Profile = () => {
         setUser(response.data);
       })
       .catch(err => {
-        setError("Backend connection failed. Check your Node.js server.");
+        const status = err?.response?.status;
+        if (status) {
+          setError(`Profile request failed (HTTP ${status}).`);
+        } else {
+          setError("Profile request failed. Check backend/API URL.");
+        }
         console.error("API Error:", err);
       });
   }, []);

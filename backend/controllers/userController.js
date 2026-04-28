@@ -9,7 +9,10 @@ const DB_UNAVAILABLE_ERRORS = new Set([
   'ECONNREFUSED',
   'PROTOCOL_CONNECTION_LOST',
   'ER_BAD_DB_ERROR',
-  'ER_NO_SUCH_TABLE'
+  'ER_NO_SUCH_TABLE',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'ETIMEDOUT'
 ]);
 
 function getFallbackUser(userId) {
